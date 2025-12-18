@@ -1,0 +1,38 @@
+Name,Website,Paper,Gemini 3 Pro,Claude Opus 4.5,GPT 5.2,Gemini's keepers,Claude's keepers,GPT's keepers
+SWE-bench Verified,https://openai.com/index/introducing-swe-bench-verified/,https://arxiv.org/abs/2310.06770,TRUE,TRUE,TRUE,FALSE,TRUE,FALSE
+SWE-bench Multilingual,https://www.swebench.com/multilingual.html,https://arxiv.org/abs/2504.21798,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE
+SWE-bench Pro,https://scale.com/research/swe_bench_pro,https://arxiv.org/abs/2509.16941,FALSE,TRUE,TRUE,TRUE,FALSE,FALSE
+Terminal-Bench 2.0,https://www.tbench.ai/,,TRUE,TRUE,FALSE,FALSE,TRUE,TRUE
+BrowseComp,https://openai.com/index/browsecomp/,https://arxiv.org/abs/2504.12516,FALSE,TRUE,TRUE,FALSE,TRUE,TRUE
+τ2-bench,https://sierra.ai/uk/blog/benchmarking-ai-agents,https://arxiv.org/abs/2406.12045,TRUE,TRUE,TRUE,FALSE,TRUE,FALSE
+OSWorld,https://os-world.github.io/,https://arxiv.org/abs/2404.07972,FALSE,TRUE,FALSE,TRUE,TRUE,TRUE
+ARC-AGI,https://arcprize.org/arc-agi,https://arxiv.org/abs/1911.01547,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+Vending-Bench 2,https://andonlabs.com/evals/vending-bench-2,https://arxiv.org/abs/2502.15840,TRUE,TRUE,FALSE,TRUE,TRUE,TRUE
+MCP-Atlas,https://scale.com/leaderboard/mcp_atlas,,FALSE,TRUE,TRUE,TRUE,TRUE,FALSE
+FinanceAgent,https://www.vals.ai/benchmarks/finance_agent,,FALSE,TRUE,FALSE,FALSE,TRUE,FALSE
+CyberGym,https://www.cybergym.io/,https://arxiv.org/abs/2506.02548,FALSE,TRUE,FALSE,TRUE,TRUE,TRUE
+SpreadsheetBench,https://spreadsheetbench.github.io/,https://arxiv.org/abs/2406.14991,FALSE,TRUE,FALSE,FALSE,TRUE,TRUE
+Humanity’s Last Exam,https://agi.safe.ai/,https://arxiv.org/abs/2501.14249,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+AIME 2025,https://matharena.ai/?view=problem&comp=aime--aime_2025,https://arxiv.org/abs/2505.23281,TRUE,TRUE,TRUE,FALSE,TRUE,FALSE
+GPQA Diamond,https://artificialanalysis.ai/evaluations/gpqa-diamond,https://arxiv.org/abs/2311.12022,TRUE,TRUE,TRUE,TRUE,TRUE,TRUE
+MMMLU,https://huggingface.co/datasets/openai/MMMLU,https://arxiv.org/abs/2009.03300,TRUE,TRUE,TRUE,FALSE,TRUE,FALSE
+MMMU,https://mmmu-benchmark.github.io/,https://arxiv.org/abs/2311.16502,FALSE,TRUE,FALSE,FALSE,TRUE,FALSE
+MMMU-Pro,https://mmmu-benchmark.github.io/,https://arxiv.org/abs/2409.02813,TRUE,FALSE,TRUE,TRUE,FALSE,TRUE
+LAB-Bench FigQA,https://huggingface.co/datasets/futurehouse/lab-bench,https://arxiv.org/abs/2407.10362,FALSE,TRUE,FALSE,FALSE,TRUE,FALSE
+WebArena,https://webarena.dev/,https://arxiv.org/abs/2307.13854,FALSE,TRUE,FALSE,FALSE,FALSE,FALSE
+MathArena Apex,https://matharena.ai/?view=problem&comp=apex--apex_2025,https://arxiv.org/abs/2505.23281,TRUE,FALSE,FALSE,FALSE,FALSE,TRUE
+ScreenShot-Pro,https://gui-agent.github.io/grounding-leaderboard/,https://arxiv.org/abs/2504.07981,TRUE,FALSE,TRUE,FALSE,FALSE,FALSE
+CharXiv Reasoning,https://charxiv.github.io/,https://arxiv.org/abs/2406.18521,TRUE,FALSE,TRUE,FALSE,TRUE,TRUE
+OmniDocBench 1.5,https://github.com/opendatalab/OmniDocBench,https://arxiv.org/abs/2412.07626,TRUE,FALSE,FALSE,TRUE,FALSE,TRUE
+Video-MMMU,https://videommmu.github.io/,https://arxiv.org/abs/2501.13826,TRUE,FALSE,TRUE,TRUE,TRUE,TRUE
+LiveCodeBench Pro,https://livecodebenchpro.com/projects/livecodebench-pro/leaderboard,https://arxiv.org/abs/2506.11928,TRUE,FALSE,FALSE,TRUE,FALSE,TRUE
+FACTS Benchmark Suite,https://deepmind.google/blog/facts-benchmark-suite-systematically-evaluating-the-factuality-of-large-language-models/,https://arxiv.org/abs/2512.10791,TRUE,FALSE,FALSE,TRUE,TRUE,TRUE
+SimpleQA Verified,https://www.kaggle.com/benchmarks/deepmind/simpleqa-verified,https://arxiv.org/abs/2509.07968,TRUE,FALSE,FALSE,FALSE,FALSE,FALSE
+Global PIQA,https://huggingface.co/datasets/mrlbenchmarks/global-piqa-nonparallel,https://arxiv.org/abs/2510.24081,TRUE,FALSE,FALSE,TRUE,TRUE,TRUE
+MRCR v2 (8-needle),https://huggingface.co/datasets/openai/mrcr,https://arxiv.org/abs/2409.12640,TRUE,FALSE,TRUE,TRUE,TRUE,TRUE
+GDPval,https://openai.com/index/gdpval/,https://arxiv.org/abs/2510.04374,FALSE,FALSE,TRUE,TRUE,TRUE,TRUE
+SWE-Lancer,https://openai.com/index/swe-lancer/,https://arxiv.org/abs/2502.12115,FALSE,FALSE,TRUE,TRUE,FALSE,TRUE
+Graphwalks,https://huggingface.co/datasets/openai/graphwalks,,FALSE,FALSE,TRUE,FALSE,TRUE,TRUE
+Toolathon,https://toolathlon.xyz,https://arxiv.org/abs/2510.25726,FALSE,FALSE,TRUE,FALSE,TRUE,TRUE
+HMMT,https://matharena.ai/?view=problem&comp=hmmt--hmmt_feb_2025,https://arxiv.org/abs/2505.23281,FALSE,FALSE,TRUE,FALSE,FALSE,FALSE
+FrontierMath,https://epoch.ai/frontiermath,https://arxiv.org/abs/2411.04872,FALSE,FALSE,TRUE,TRUE,TRUE,TRUE

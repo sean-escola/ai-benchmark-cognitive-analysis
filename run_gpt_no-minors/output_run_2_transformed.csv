@@ -1,0 +1,70 @@
+Benchmark,Website,Paper,Description,Cognitive Functions,Max AI Tier
+Terminal-Bench 2.0,https://www.tbench.ai/,,"Terminal-Bench 2.0 evaluates agentic performance in real command-line environments, where models must execute multi-step tasks by issuing shell commands and interpreting outputs. It emphasizes robustness to tool errors, stateful interaction over many steps, and correct end-to-end task completion under realistic constraints.","L1: Language Comprehension (minor)
+L2: Planning, Decision-making, Adaptive Error Correction, Working Memory
+L3: ",L2
+BrowseComp,https://openai.com/index/browsecomp/,https://arxiv.org/abs/2504.12516,"BrowseComp evaluates deep-research behavior in which a model must search, read, and synthesize information from a controlled corpus to answer difficult questions. It tests the ability to navigate noisy evidence, reconcile conflicting sources, and produce grounded final answers.","L1: 
+L2: Planning, Attention, Semantic Understanding & Context Recognition, Working Memory, Logical Reasoning (minor)
+L3: ",L2
+OSWorld,https://os-world.github.io/,https://arxiv.org/abs/2404.07972,"OSWorld benchmarks multimodal computer-use agents performing tasks inside desktop operating systems and applications via screenshots and UI interactions. Success depends on correctly perceiving UI state, selecting appropriate actions, and recovering from mistakes across long-horizon workflows.","L1: Visual Perception
+L2: Scene Understanding & Visual Reasoning, Sensorimotor Coordination, Planning, Attention (minor)
+L3: ",L2
+ARC-AGI,https://arcprize.org/arc-agi,https://arxiv.org/abs/1911.01547,"ARC-AGI measures few-shot “fluid reasoning” on grid-based transformation puzzles, requiring inference of latent rules from a handful of examples. It is designed to reduce reliance on memorized knowledge and instead test generalization to novel pattern-learning tasks.","L1: Visual Perception (minor)
+L2: Logical Reasoning, Working Memory, Spatial Representation & Mapping
+L3: Cognitive Flexibility",L3
+Vending-Bench 2,https://andonlabs.com/evals/vending-bench-2,https://arxiv.org/abs/2502.15840,"Vending-Bench 2 evaluates long-horizon autonomy by having an agent run a simulated vending-machine business over an extended period, optimizing inventory, pricing, and supplier interactions. It stresses sustained coherence, strategic planning, and adaptive responses to changing market conditions.","L1: 
+L2: Planning, Decision-making, Reward Mechanisms, Working Memory
+L3: Social Reasoning & Theory of Mind (minor)",L2
+CyberGym,https://www.cybergym.io/,https://arxiv.org/abs/2506.02548,"CyberGym evaluates cybersecurity agents on tasks such as identifying known vulnerabilities from descriptions and discovering new vulnerabilities in real-world codebases at scale. It emphasizes precise technical reasoning, iterative debugging/exploitation workflows, and careful interpretation of program behavior and evidence.","L1: 
+L2: Logical Reasoning, Planning, Adaptive Error Correction, Working Memory
+L3: Inhibitory Control (minor)",L2
+SpreadsheetBench,https://spreadsheetbench.github.io/,https://arxiv.org/abs/2406.14991,"SpreadsheetBench measures an agent’s ability to read, manipulate, and generate complex spreadsheets using realistic office-style tasks. It probes structured reasoning over tables, formula logic, and multi-step transformations while maintaining consistency across many interdependent cells and constraints.","L1: 
+L2: Working Memory, Logical Reasoning, Planning, Attention, Semantic Understanding & Context Recognition (minor)
+L3: ",L2
+Humanity’s Last Exam,https://agi.safe.ai/,https://arxiv.org/abs/2501.14249,"Humanity’s Last Exam is a broad, frontier-level benchmark spanning advanced academic and professional questions, often multimodal, intended to stress general reasoning and knowledge at the limits of current systems. Evaluations commonly compare tool-free performance versus tool-assisted (search/code) settings to assess end-to-end problem solving.","L1: Language Comprehension, Visual Perception (minor)
+L2: Logical Reasoning, Semantic Understanding & Context Recognition, Working Memory
+L3: ",L2
+GPQA Diamond,https://artificialanalysis.ai/evaluations/gpqa-diamond,https://arxiv.org/abs/2311.12022,"GPQA Diamond is a curated subset of extremely difficult, graduate-level multiple-choice science questions designed to be resistant to superficial pattern-matching and web lookup. It tests deep conceptual understanding and multi-step reasoning across physics, chemistry, and biology.","L1: Language Comprehension (minor)
+L2: Logical Reasoning, Semantic Understanding & Context Recognition, Working Memory
+L3: ",L2
+MMMU-Pro,https://mmmu-benchmark.github.io/,https://arxiv.org/abs/2409.02813,"MMMU-Pro evaluates expert-level multimodal understanding and reasoning across many disciplines using images, diagrams, charts, and accompanying text. It emphasizes integrating visual evidence with domain knowledge to answer questions that require nontrivial visual reasoning rather than surface captioning.","L1: Visual Perception
+L2: Scene Understanding & Visual Reasoning, Multisensory Integration, Logical Reasoning, Visual Attention & Eye Movements (minor)
+L3: ",L2
+MathArena Apex,https://matharena.ai/?view=problem&comp=apex--apex_2025,https://arxiv.org/abs/2505.23281,"MathArena Apex is a competitive mathematics evaluation intended to distinguish top-tier models on hard problems and robust solution quality. It stresses correct formal reasoning under pressure, with scoring that rewards accuracy and penalizes brittle or inconsistent approaches.","L1: 
+L2: Logical Reasoning, Working Memory, Planning (minor)
+L3: Cognitive Flexibility (minor)",L2
+CharXiv Reasoning,https://charxiv.github.io/,https://arxiv.org/abs/2406.18521,"CharXiv Reasoning focuses on answering questions grounded in figures and content from scientific papers (e.g., plots, tables, and diagrams), often with multi-step interpretation. It targets faithful extraction of information from complex visuals and reasoning that connects visual evidence to scientific claims.","L1: Visual Perception, Language Comprehension (minor)
+L2: Scene Understanding & Visual Reasoning, Logical Reasoning, Working Memory
+L3: ",L2
+OmniDocBench 1.5,https://github.com/opendatalab/OmniDocBench,https://arxiv.org/abs/2412.07626,"OmniDocBench 1.5 evaluates document understanding and OCR-style extraction across heterogeneous layouts such as mixed text, tables, formulas, and reading order. It emphasizes faithfully reconstructing structured content from visually complex documents rather than producing free-form summaries.","L1: Visual Perception, Language Comprehension
+L2: Attention, Working Memory (minor), Scene Understanding & Visual Reasoning (minor)
+L3: ",L2
+Video-MMMU,https://videommmu.github.io/,https://arxiv.org/abs/2501.13826,"Video-MMMU extends multimodal reasoning to video, requiring models to answer questions based on temporally unfolding visual content and associated text/audio context. It tests whether an agent can integrate information across frames, track events, and maintain coherent situation models over time.","L1: Visual Perception
+L2: Working Memory, Multisensory Integration (minor), Scene Understanding & Visual Reasoning (minor)
+L3: Cognitive Timing & Predictive Modeling",L3
+LiveCodeBench Pro,https://livecodebenchpro.com/projects/livecodebench-pro/leaderboard,https://arxiv.org/abs/2506.11928,"LiveCodeBench Pro evaluates coding ability on fresh, competition-style and practical programming tasks with strong anti-contamination goals and leaderboard-style comparisons. It stresses producing correct implementations under time/complexity constraints and handling edge cases and iterative fixes.","L1: Language Comprehension (minor)
+L2: Logical Reasoning, Planning, Adaptive Error Correction, Working Memory
+L3: ",L2
+FACTS Benchmark Suite,https://deepmind.google/blog/facts-benchmark-suite-systematically-evaluating-the-factuality-of-large-language-models/,https://arxiv.org/abs/2512.10791,"The FACTS Benchmark Suite systematically evaluates factuality and grounding, measuring how often models produce incorrect, unsupported, or confabulated statements across diverse settings. It emphasizes reliability under uncertainty and the ability to preserve truthfulness when responding to prompts that invite speculation.","L1: Language Production (minor)
+L2: Semantic Understanding & Context Recognition, Working Memory (minor)
+L3: Inhibitory Control, Self-reflection (minor)",L3
+Global PIQA,https://huggingface.co/datasets/mrlbenchmarks/global-piqa-nonparallel,https://arxiv.org/abs/2510.24081,"Global PIQA tests practical commonsense reasoning across many languages and cultural contexts, emphasizing whether models can choose plausible actions or explanations in everyday scenarios. It aims to reduce Anglocentric bias by broadening evaluation to non-parallel, multilingual settings.","L1: Language Comprehension
+L2: Semantic Understanding & Context Recognition, Logical Reasoning
+L3: Social Reasoning & Theory of Mind (minor)",L2
+MRCR v2 (8-needle),https://huggingface.co/datasets/openai/mrcr,https://arxiv.org/abs/2409.12640,"MRCR v2 (8-needle) evaluates long-context retrieval and multi-round coreference resolution by embedding multiple similar “needle” interactions inside large “haystack” contexts. The model must identify and reproduce the correct target response associated with the specified needle, stressing precision under extreme context length.","L1: 
+L2: Working Memory, Attention, Episodic Memory, Semantic Understanding & Context Recognition
+L3: ",L2
+GDPval,https://openai.com/index/gdpval/,https://arxiv.org/abs/2510.04374,"GDPval evaluates economically valuable, well-specified knowledge work across many occupations, with human judges comparing model outputs to professional work products. Tasks often require producing artifacts (e.g., plans, analyses, spreadsheets/slides) that meet real constraints and stakeholder needs.","L1: Language Production
+L2: Planning, Decision-making, Semantic Understanding & Context Recognition
+L3: Social Reasoning & Theory of Mind (minor)",L2
+SWE-Lancer,https://openai.com/index/swe-lancer/,https://arxiv.org/abs/2502.12115,"SWE-Lancer evaluates real-world software engineering work resembling contracted “freelance” tasks, where models must understand a repository, implement changes, and satisfy acceptance criteria. It emphasizes end-to-end reliability, prioritization among alternatives, and producing patches that integrate cleanly with existing systems.","L1: 
+L2: Planning, Decision-making, Logical Reasoning, Adaptive Error Correction, Working Memory (minor)
+L3: ",L2
+Graphwalks,https://huggingface.co/datasets/openai/graphwalks,,"Graphwalks tests reasoning over graph-structured data by requiring models to follow specified traversals, track nodes/relationships, and answer queries that depend on multi-hop structure. It stresses consistent state tracking and accurate navigation-like reasoning across long, distractor-heavy contexts.","L1: 
+L2: Spatial Representation & Mapping, Working Memory, Logical Reasoning, Attention (minor)
+L3: ",L2
+Toolathon,https://toolathlon.xyz,https://arxiv.org/abs/2510.25726,"Toolathon evaluates tool-using agents across diverse APIs and workflows, emphasizing correct tool selection, argument construction, and multi-step orchestration to reach a goal. It stresses robustness to tool failures, iterative refinement, and maintaining task intent over many interactions.","L1: 
+L2: Planning, Decision-making, Working Memory, Adaptive Error Correction
+L3: Inhibitory Control (minor)",L2
+FrontierMath,https://epoch.ai/frontiermath,https://arxiv.org/abs/2411.04872,"FrontierMath evaluates expert-level mathematics with difficult, research-adjacent problems designed to strongly separate top models and reduce contamination effects. It emphasizes sustained multi-step reasoning, careful symbolic/quantitative manipulation, and verifying solutions rather than producing plausible-but-wrong answers.","L1: 
+L2: Logical Reasoning, Working Memory, Planning (minor)
+L3: Cognitive Flexibility (minor)",L2

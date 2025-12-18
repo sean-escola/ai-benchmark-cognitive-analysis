@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temporary/cache files
+uploaded_file_ids.json
+temp/
+*.log
+
+# Old timestamped run directories
+run_202*
+
+# Development files not for release
+analyze_tier_changes.py
+prompt.txt
+ai_tiers.txt
+README_BENCHMARK_ANALYSIS.md
