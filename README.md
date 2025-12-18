@@ -1,6 +1,6 @@
 # AI Benchmark Cognitive Function Analysis
 
-This repository uses GPT-5.2 with high reasoning effort to analyze AI benchmarks and categorize them by cognitive functions and AI tiers, based on the cognitive neuroscience framework from Liu et al.
+This repository uses GPT-5.2 with high reasoning effort to analyze AI benchmarks and categorize them by cognitive functions and AI tiers, based on the cognitive neuroscience framework from [Liu et al., 2025](https://arxiv.org/abs/2504.01990).
 
 ## Overview
 
@@ -76,7 +76,7 @@ The repository includes all necessary input files:
   - Gemini selected 18 benchmarks, Claude selected 26, GPT selected 23
   - Note: The "keepers" for any given model are the subset selected by that model which is not the same subset used to assess that model's capabilities in its release documents
   - These selections are non-deterministic; repeating the process would likely yield different keeper lists
-- **`Liu et al., Ch 1.pdf`**: Cognitive neuroscience framework reference
+- **`Liu et al., Ch 1.pdf`**: First chapter of [Liu et al., 2025](https://arxiv.org/abs/2504.01990) - Cognitive neuroscience framework reference
 - **`Gemini 3 Pro - eval info.pdf`**: Gemini 3 Pro evaluation document
 - **`Claude Opus 4.5 - eval info.pdf`**: Claude Opus 4.5 evaluation document
 - **`GPT 5.2 - eval info.pdf`**: GPT 5.2 evaluation document
