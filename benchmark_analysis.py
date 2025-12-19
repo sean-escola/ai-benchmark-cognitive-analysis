@@ -3,18 +3,17 @@
 Script to call GPT-5.2 to analyze benchmarks and categorize cognitive functions by AI tier.
 
 Usage:
-    python benchmark_analysis.py --runs 5
+    python benchmark_analysis.py --model gemini --runs 5
 
 This script:
 1. Calls GPT-5.2 with high reasoning effort
 2. Attaches PDFs for context
 3. Uses JSON schema for structured outputs
 4. Validates the generated data
-5. Checks that reference links work
-6. Transforms data to group cognitive functions by AI tier
-7. Outputs CSV files
-8. Runs multiple times in parallel
-9. Computes summary statistics
+5. Transforms data to group cognitive functions by AI tier
+6. Outputs CSV files
+7. Runs multiple times in parallel
+8. Computes summary statistics
 """
 
 import argparse
@@ -36,7 +35,7 @@ PDF_LIU = "Liu et al., Ch 1.pdf"
 PDF_GEMINI = "Gemini 3 Pro - eval info.pdf"
 PDF_CLAUDE = "Claude Opus 4.5 - eval info.pdf"
 PDF_GPT = "GPT 5.2 - eval info.pdf"
-BENCHMARK_INFO_CSV = "BENCHMARK INFO.csv"
+BENCHMARK_INFO_CSV = "benchmark_info.csv"
 FILE_IDS_CACHE = "uploaded_file_ids.json"
 MAX_RETRIES = 3
 
@@ -242,7 +241,7 @@ class BenchmarkAnalyzer:
         if self.exclude_minors:
             constraint_3 = """3) cognitive_functions must be an array of objects, each with:
    - "name": chosen ONLY from the allowed cognitive functions list below
-   - "is_minor": false if this cognitive function is a core function probed by the benchmark, true if only minimally probed"""
+   - "is_minor": false if this is a core cognitive function probed by the benchmark; true if this function is only minimally probed and clearly not the emphasis of the benchmark"""
             cf_example = """[
         {{"name": "Language Comprehension", "is_minor": false}},
         {{"name": "Face Recognition", "is_minor": true}},
