@@ -90,34 +90,34 @@ EXPECTED_COGNITIVE_FUNCTIONS = sorted(
 )
 
 
-def load_benchmarks(keepers: str) -> List[Dict[str, str]]:
+def load_benchmarks(model: str) -> List[Dict[str, str]]:
     """
-    Load benchmarks from CSV based on keepers column.
+    Load benchmarks from CSV based on model's evaluation set.
 
     Args:
-        keepers: One of "gemini", "claude", or "gpt"
+        model: One of "gemini", "claude", or "gpt"
 
     Returns:
         List of dicts with keys: name, website, paper
     """
-    keepers_col_map = {
-        "gemini": "Gemini's keepers",
-        "claude": "Claude's keepers",
-        "gpt": "GPT's keepers"
+    model_col_map = {
+        "gemini": "Gemini 3 Pro",
+        "claude": "Claude Opus 4.5",
+        "gpt": "GPT 5.2"
     }
 
-    if keepers not in keepers_col_map:
-        raise ValueError(f"Invalid keepers value: {keepers}. Must be one of: gemini, claude, gpt")
+    if model not in model_col_map:
+        raise ValueError(f"Invalid model value: {model}. Must be one of: gemini, claude, gpt")
 
-    keepers_col = keepers_col_map[keepers]
+    model_col = model_col_map[model]
     benchmarks = []
 
     with open(BENCHMARK_INFO_CSV, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
             # Get the value, handling possible missing column
-            keeper_value = row.get(keepers_col, "").strip().upper()
-            if keeper_value == "TRUE":
+            use_benchmark = row.get(model_col, "").strip().upper()
+            if use_benchmark == "TRUE":
                 benchmarks.append({
                     "name": row["Name"],
                     "website": row["Website"],
@@ -755,8 +755,8 @@ JSON schema (no extra keys):
 
 async def main():
     parser = argparse.ArgumentParser(description='Analyze benchmarks with GPT-5.2')
-    parser.add_argument('--keepers', type=str, required=True, choices=['gemini', 'claude', 'gpt'],
-                        help='Which benchmarks to include: gemini, claude, or gpt')
+    parser.add_argument('--model', type=str, required=True, choices=['gemini', 'claude', 'gpt'],
+                        help='Which model\'s benchmark set to analyze: gemini, claude, or gpt')
     parser.add_argument('--runs', type=int, default=1,
                         help='Number of parallel runs (default: 1)')
     parser.add_argument('--output-dir', type=str, default=None,
@@ -767,9 +767,9 @@ async def main():
                         help='Print the prompt and exit without running analysis')
     args = parser.parse_args()
 
-    # Load benchmarks based on keepers flag
-    benchmarks = load_benchmarks(args.keepers)
-    print(f"Loaded {len(benchmarks)} benchmarks for {args.keepers}")
+    # Load benchmarks based on model flag
+    benchmarks = load_benchmarks(args.model)
+    print(f"Loaded {len(benchmarks)} benchmarks for {args.model}")
 
     # If --print-prompt, just print the prompt and exit
     if args.print_prompt:
@@ -806,7 +806,7 @@ async def main():
     else:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         minors_suffix = "no-minors" if args.exclude_minors else "with-minors"
-        output_dir = f"run_{args.keepers}_{minors_suffix}_{timestamp}"
+        output_dir = f"run_{args.model}_{minors_suffix}_{timestamp}"
         print(f"Creating new output directory: {output_dir}")
 
     # Run analysis
