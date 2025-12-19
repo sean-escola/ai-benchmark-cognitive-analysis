@@ -1,27 +1,21 @@
 Benchmark,L1_count,L2_count,L3_count,Total_runs,Mode_tier,Distinct_tiers
 SWE-bench Verified,0,25,0,25,L2,1
+SWE-bench Multilingual,0,1,24,25,L3,2
+SWE-bench Pro,0,5,20,25,L3,2
 Terminal-Bench 2.0,0,21,4,25,L2,2
-BrowseComp,0,19,6,25,L2,2
+BrowseComp,0,23,2,25,L2,2
 τ2-bench,0,0,25,25,L3,1
 OSWorld,0,25,0,25,L2,1
 ARC-AGI,0,0,25,25,L3,1
-Vending-Bench 2,0,5,20,25,L3,2
+Vending-Bench 2,0,2,23,25,L3,2
 MCP-Atlas,0,23,2,25,L2,2
-FinanceAgent,0,24,1,25,L2,2
-CyberGym,0,14,11,25,L2,2
-SpreadsheetBench,0,25,0,25,L2,1
-Humanity’s Last Exam,0,24,1,25,L2,2
-AIME 2025,0,19,6,25,L2,2
-GPQA Diamond,0,20,5,25,L2,2
-MMMLU,0,22,3,25,L2,2
+FinanceAgent,0,25,0,25,L2,1
+CyberGym,0,10,15,25,L3,2
+SpreadsheetBench,0,24,1,25,L2,2
+Humanity’s Last Exam,0,25,0,25,L2,1
+AIME 2025,0,24,1,25,L2,2
+GPQA Diamond,0,25,0,25,L2,1
+MMMLU,0,1,24,25,L3,2
 MMMU,0,25,0,25,L2,1
 LAB-Bench FigQA,0,25,0,25,L2,1
-CharXiv Reasoning,0,25,0,25,L2,1
-Video-MMMU,0,0,25,25,L3,1
-FACTS Benchmark Suite,0,0,25,25,L3,1
-Global PIQA,0,15,10,25,L2,2
-MRCR v2 (8-needle),0,15,10,25,L2,2
-GDPval,0,4,21,25,L3,2
-Graphwalks,0,22,3,25,L2,2
-Toolathon,0,17,8,25,L2,2
-FrontierMath,0,7,18,25,L3,2
+WebArena,0,23,2,25,L2,2

@@ -62,8 +62,8 @@ python benchmark_analysis.py --model claude --exclude-minors --runs 25
 # Print GPT prompt without running
 python benchmark_analysis.py --model gpt --print-prompt
 
-# Resume/extend existing run
-python benchmark_analysis.py --model gemini --runs 10 --output-dir run_gemini_with-minors
+# Resume/extend existing run (use the timestamped directory name)
+python benchmark_analysis.py --model gemini --runs 10 --output-dir run_gemini_with-minors_20251218_172548
 ```
 
 ## Input Files
@@ -84,9 +84,11 @@ All PDFs are uploaded to OpenAI on first run and file IDs are cached in `uploade
 
 ### Directory Naming
 
-Output directories follow the pattern: `run_{model}_{minors-mode}`
+When you run the script, output directories are created with timestamps: `run_{model}_{minors-mode}_{timestamp}`
 
-Example: `run_gemini_with-minors/`
+Example: `run_gemini_with-minors_20251218_172548/`
+
+The pre-generated result directories in this repository have had timestamps removed for cleanliness.
 
 ### Output Files
 

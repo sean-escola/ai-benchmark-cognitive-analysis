@@ -129,16 +129,18 @@ def load_benchmarks(model: str) -> List[Dict[str, str]]:
 class BenchmarkAnalyzer:
     """Main class for running benchmark analysis with GPT-5.2."""
 
-    def __init__(self, output_dir: str, benchmarks: List[Dict[str, str]], exclude_minors: bool = False):
+    def __init__(self, output_dir: str, benchmarks: List[Dict[str, str]], exclude_minors: bool = False, debug: bool = False):
         self.client = OpenAI()
         self.ai_tiers = COGNITIVE_FUNCTIONS_BY_TIER
         self.func_to_tier = {}
         self.expected_cognitive_functions = EXPECTED_COGNITIVE_FUNCTIONS
         self.benchmarks = benchmarks
         self.exclude_minors = exclude_minors
+        self.debug = debug
         self.file_ids = {}
-        self.output_dir = Path(output_dir)
-        self.output_dir.mkdir(parents=True, exist_ok=True)
+        self.output_dir = Path(output_dir) if output_dir else None
+        if self.output_dir:
+            self.output_dir.mkdir(parents=True, exist_ok=True)
         self._upload_lock = asyncio.Lock()  # Prevent concurrent uploads
         self.setup_tier_mapping()
 
@@ -318,11 +320,25 @@ JSON schema (no extra keys):
                         break
 
                 if cache_valid:
-                    self.file_ids = cache_data.get('file_ids', {})
-                    print(f"Loaded cached file IDs from {FILE_IDS_CACHE}")
-                    for key, file_id in self.file_ids.items():
-                        print(f"  {pdf_files[key]} -> {file_id}")
-                    return
+                    # Validate that cached file IDs still exist on OpenAI servers
+                    cached_ids = cache_data.get('file_ids', {})
+                    print(f"Validating cached file IDs from {FILE_IDS_CACHE}...")
+                    all_valid = True
+                    for key, file_id in cached_ids.items():
+                        try:
+                            self.client.files.retrieve(file_id)
+                            print(f"  ✓ {pdf_files[key]} -> {file_id}")
+                        except Exception as e:
+                            print(f"  ✗ {pdf_files[key]} -> {file_id} (invalid: {e})")
+                            all_valid = False
+                            break
+
+                    if all_valid:
+                        self.file_ids = cached_ids
+                        print("All cached file IDs are valid")
+                        return
+                    else:
+                        print("Cached file IDs expired, will re-upload")
             except (json.JSONDecodeError, KeyError, FileNotFoundError):
                 pass
 
@@ -584,6 +600,13 @@ JSON schema (no extra keys):
 
             except Exception as e:
                 print(f"Error in run {run_id}, attempt {attempt + 1}: {str(e)}")
+
+                # Print traceback only in debug mode
+                if self.debug:
+                    print(f"Error type: {type(e).__name__}")
+                    import traceback
+                    traceback.print_exc()
+
                 if attempt < MAX_RETRIES - 1:
                     print("Retrying...")
                     continue
@@ -764,6 +787,8 @@ async def main():
                         help='Include is_minor flag for cognitive functions (default: False)')
     parser.add_argument('--print-prompt', action='store_true',
                         help='Print the prompt and exit without running analysis')
+    parser.add_argument('--debug', action='store_true',
+                        help='Print detailed error tracebacks (default: False)')
     args = parser.parse_args()
 
     # Load benchmarks based on model flag
@@ -772,8 +797,8 @@ async def main():
 
     # If --print-prompt, just print the prompt and exit
     if args.print_prompt:
-        # Create a temporary analyzer just to build the prompt
-        temp_analyzer = BenchmarkAnalyzer("temp", benchmarks, args.exclude_minors)
+        # Create a temporary analyzer just to build the prompt (no output directory needed)
+        temp_analyzer = BenchmarkAnalyzer(None, benchmarks, args.exclude_minors, args.debug)
         prompt = temp_analyzer.build_prompt()
         print("\n" + "="*80)
         print("PROMPT")
@@ -809,7 +834,7 @@ async def main():
         print(f"Creating new output directory: {output_dir}")
 
     # Run analysis
-    analyzer = BenchmarkAnalyzer(output_dir, benchmarks, exclude_minors=args.exclude_minors)
+    analyzer = BenchmarkAnalyzer(output_dir, benchmarks, exclude_minors=args.exclude_minors, debug=args.debug)
     await analyzer.run_parallel_analysis(args.runs)
 
 
