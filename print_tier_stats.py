@@ -150,16 +150,23 @@ def print_stats(name, tier_counts_per_run, l3_assignments, benchmark_tier_counts
             l3_pct = counts['L3'] / total * 100
             mode = max(counts, key=counts.get)
             if mode == 'L3':
-                modal_l3.append((benchmark, l3_pct, counts['L3'], total))
+                # Tally cognitive functions for this benchmark
+                func_counts = defaultdict(int)
+                if benchmark in l3_assignments:
+                    for run_id, funcs in l3_assignments[benchmark].items():
+                        for func in funcs:
+                            func_counts[func] += 1
+                modal_l3.append((benchmark, l3_pct, counts['L3'], total, func_counts))
 
-    if modal_l3:
+    if modal_l3 and verbose:
         print(f"\nModal L3 Benchmarks:")
-        for benchmark, pct, l3_count, total in sorted(modal_l3, key=lambda x: -x[1]):
-            print(f"  {benchmark}: {l3_count}/{total} ({pct:.0f}%)")
+        for benchmark, pct, l3_count, total, func_counts in sorted(modal_l3, key=lambda x: -x[1]):
+            func_str = ", ".join([f"{func} x{count}" for func, count in sorted(func_counts.items(), key=lambda x: -x[1])])
+            print(f"  {benchmark}: {l3_count}/{total} ({pct:.0f}%) — {func_str}")
 
     # L3 function breakdown
     if l3_assignments and verbose:
-        print(f"\nL3 Function Frequency:")
+        print(f"\nL3 Function Frequency (total):")
         func_counts = defaultdict(int)
         for benchmark, run_funcs in l3_assignments.items():
             for run_id, funcs in run_funcs.items():
