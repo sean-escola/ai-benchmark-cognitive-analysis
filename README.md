@@ -78,6 +78,23 @@ python split_by_model.py run_all
 
 This creates `tier_variability_summary_{gemini,claude,gpt}.csv` files filtered to each model's benchmark set.
 
+### Printing Statistics
+
+Use `print_tier_stats.py` to view tier statistics from a run:
+
+```bash
+# Overall statistics
+python print_tier_stats.py run_all
+
+# Overall + per-model breakdown
+python print_tier_stats.py run_all --split
+
+# Summary only (no L3 function details)
+python print_tier_stats.py run_all --split --quiet
+```
+
+This requires `--model all` results (all 37 benchmarks).
+
 ## Input Files
 
 The repository includes all necessary input files:
