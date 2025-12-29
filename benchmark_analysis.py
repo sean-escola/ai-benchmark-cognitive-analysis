@@ -36,57 +36,10 @@ PDF_GEMINI = "Gemini 3 Pro - eval info.pdf"
 PDF_CLAUDE = "Claude Opus 4.5 - eval info.pdf"
 PDF_GPT = "GPT 5.2 - eval info.pdf"
 BENCHMARK_INFO_CSV = "benchmark_info.csv"
+COGNITIVE_FUNCTIONS_CSV = "cognitive_functions.csv"
 FILE_IDS_CACHE = "uploaded_file_ids.json"
 MAX_RETRIES = 3
 
-# Cognitive functions by AI tier
-COGNITIVE_FUNCTIONS_BY_TIER = {
-    "L1": [
-        "Visual Perception",
-        "Language Comprehension",
-        "Language Production",
-        "Face Recognition",
-        "Auditory Processing",
-        "Reflexive Responses",
-    ],
-    "L2": [
-        "Planning",
-        "Logical Reasoning",
-        "Decision-making",
-        "Working Memory",
-        "Reward Mechanisms",
-        "Multisensory Integration",
-        "Spatial Representation & Mapping",
-        "Attention",
-        "Sensorimotor Coordination",
-        "Scene Understanding & Visual Reasoning",
-        "Visual Attention & Eye Movements",
-        "Episodic Memory",
-        "Semantic Understanding & Context Recognition",
-        "Adaptive Error Correction",
-        "Motor Skill Learning",
-        "Motor Coordination",
-    ],
-    "L3": [
-        "Cognitive Flexibility",
-        "Inhibitory Control",
-        "Social Reasoning & Theory of Mind",
-        "Empathy",
-        "Emotional Processing",
-        "Self-reflection",
-        "Tactile Perception",
-        "Lifelong Learning",
-        "Cognitive Timing & Predictive Modeling",
-        "Autonomic Regulation",
-        "Arousal & Attention States",
-        "Motivational Drives",
-    ],
-}
-
-# Derive full list of cognitive functions (alphabetically sorted)
-EXPECTED_COGNITIVE_FUNCTIONS = sorted(
-    [cf for tier_funcs in COGNITIVE_FUNCTIONS_BY_TIER.values() for cf in tier_funcs]
-)
 
 
 def load_benchmarks(model: str) -> List[Dict[str, str]]:
@@ -94,7 +47,7 @@ def load_benchmarks(model: str) -> List[Dict[str, str]]:
     Load benchmarks from CSV based on model's evaluation set.
 
     Args:
-        model: One of "gemini", "claude", or "gpt"
+        model: One of "gemini", "claude", "gpt", or "all"
 
     Returns:
         List of dicts with keys: name, website, paper
@@ -105,18 +58,26 @@ def load_benchmarks(model: str) -> List[Dict[str, str]]:
         "gpt": "GPT 5.2"
     }
 
-    if model not in model_col_map:
-        raise ValueError(f"Invalid model value: {model}. Must be one of: gemini, claude, gpt")
+    if model not in model_col_map and model != "all":
+        raise ValueError(f"Invalid model value: {model}. Must be one of: gemini, claude, gpt, all")
 
-    model_col = model_col_map[model]
     benchmarks = []
 
     with open(BENCHMARK_INFO_CSV, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            # Get the value, handling possible missing column
-            use_benchmark = row.get(model_col, "").strip().upper()
-            if use_benchmark == "TRUE":
+            if model == "all":
+                # Include benchmark if ANY model uses it
+                use_benchmark = any(
+                    row.get(col, "").strip().upper() == "TRUE"
+                    for col in model_col_map.values()
+                )
+            else:
+                # Include benchmark if specific model uses it
+                model_col = model_col_map[model]
+                use_benchmark = row.get(model_col, "").strip().upper() == "TRUE"
+
+            if use_benchmark:
                 benchmarks.append({
                     "name": row["Name"],
                     "website": row["Website"],
@@ -126,14 +87,33 @@ def load_benchmarks(model: str) -> List[Dict[str, str]]:
     return benchmarks
 
 
+def load_cognitive_functions() -> Tuple[Dict[str, str], Dict[str, str]]:
+    """
+    Load cognitive function names, descriptions, and tiers from CSV.
+
+    Returns:
+        Tuple of (name -> description dict, name -> tier dict)
+    """
+    descriptions = {}
+    tiers = {}
+    with open(COGNITIVE_FUNCTIONS_CSV, 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            name = row['Capacity']
+            descriptions[name] = row['Description']
+            tiers[name] = row['AI_Tier']
+    return descriptions, tiers
+
+
 class BenchmarkAnalyzer:
     """Main class for running benchmark analysis with GPT-5.2."""
 
-    def __init__(self, output_dir: str, benchmarks: List[Dict[str, str]], exclude_minors: bool = False, debug: bool = False):
-        self.client = OpenAI()
-        self.ai_tiers = COGNITIVE_FUNCTIONS_BY_TIER
-        self.func_to_tier = {}
-        self.expected_cognitive_functions = EXPECTED_COGNITIVE_FUNCTIONS
+    def __init__(self, output_dir: str, benchmarks: List[Dict[str, str]], exclude_minors: bool = False, debug: bool = False, cognitive_functions: Dict[str, str] = None, func_to_tier: Dict[str, str] = None, include_cf_descriptions: bool = True):
+        self._client = None  # Lazy initialization
+        self.func_to_tier = func_to_tier or {}  # name -> tier (L1/L2/L3)
+        self.cognitive_functions = cognitive_functions or {}  # name -> description
+        self.expected_cognitive_functions = sorted(self.cognitive_functions.keys())
+        self.include_cf_descriptions = include_cf_descriptions
         self.benchmarks = benchmarks
         self.exclude_minors = exclude_minors
         self.debug = debug
@@ -142,17 +122,21 @@ class BenchmarkAnalyzer:
         if self.output_dir:
             self.output_dir.mkdir(parents=True, exist_ok=True)
         self._upload_lock = asyncio.Lock()  # Prevent concurrent uploads
-        self.setup_tier_mapping()
 
-    def setup_tier_mapping(self):
-        """Create reverse mapping from function to tier."""
-        for tier, functions in COGNITIVE_FUNCTIONS_BY_TIER.items():
-            for func in functions:
-                self.func_to_tier[func] = tier
-
+        # Get unique tiers
+        unique_tiers = sorted(set(self.func_to_tier.values()))
         print(f"Loaded {len(self.benchmarks)} benchmarks")
         print(f"Loaded {len(self.expected_cognitive_functions)} cognitive functions")
-        print(f"Loaded AI tiers: {list(self.ai_tiers.keys())}")
+        print(f"Loaded AI tiers: {unique_tiers}")
+
+    @property
+    def client(self):
+        """Lazy initialization of OpenAI client - only created when needed."""
+        if self._client is None:
+            if not os.getenv("OPENAI_API_KEY"):
+                raise RuntimeError("OPENAI_API_KEY is not set")
+            self._client = OpenAI()
+        return self._client
 
     def build_json_schema(self) -> Dict[str, Any]:
         """Build JSON schema for structured outputs."""
@@ -227,7 +211,17 @@ class BenchmarkAnalyzer:
     def build_prompt(self) -> str:
         """Build the prompt for the model."""
         num_evals = len(self.benchmarks)
-        cf_list = "\n".join([f"- {cf}" for cf in self.expected_cognitive_functions])
+
+        # Build cognitive functions section (table with descriptions or simple list)
+        if self.include_cf_descriptions:
+            cf_table_lines = ["| Cognitive Function | Description |", "|---|---|"]
+            for name in self.expected_cognitive_functions:
+                desc = self.cognitive_functions.get(name, "")
+                desc_escaped = desc.replace("|", "\\|")
+                cf_table_lines.append(f"| {name} | {desc_escaped} |")
+            cf_section = "\n".join(cf_table_lines)
+        else:
+            cf_section = "\n".join([f"- {name}" for name in self.expected_cognitive_functions])
 
         # Build benchmark table
         benchmark_table_lines = []
@@ -240,28 +234,35 @@ class BenchmarkAnalyzer:
         benchmark_table = "Benchmark Name | Website Link | Paper Link\n" + "\n".join(benchmark_table_lines)
 
         # Build constraint 3 and example based on exclude_minors flag
+        cf_source = "table" if self.include_cf_descriptions else "list"
         if self.exclude_minors:
-            constraint_3 = """3) cognitive_functions must be an array of objects, each with:
-   - "name": chosen ONLY from the allowed cognitive functions list below
+            constraint_3 = f"""3) cognitive_functions must be an array of objects, each with:
+   - "name": chosen ONLY from the cognitive functions {cf_source} below
    - "is_minor": false if this is a core cognitive function probed by the benchmark; true if this function is only minimally probed and clearly not the emphasis of the benchmark"""
             cf_example = """[
-        {{"name": "Language Comprehension", "is_minor": false}},
-        {{"name": "Face Recognition", "is_minor": true}},
-        {{"name": "Visual Perception", "is_minor": false}}
+        {{"name": "A cognitive function", "is_minor": false}},
+        {{"name": "Another cognitive function", "is_minor": true}},
+        {{"name": "Yet another cognitive function", "is_minor": false}}
       ]"""
         else:
-            constraint_3 = """3) cognitive_functions must be an array of cognitive function names chosen ONLY from the allowed cognitive functions list below"""
+            constraint_3 = f"""3) cognitive_functions must be an array of cognitive function names chosen ONLY from the cognitive functions {cf_source} below"""
             cf_example = """[
-        "Language Comprehension",
-        "Visual Perception",
-        "Logical Reasoning"
+        "A cognitive function",
+        "Another cognitive function",
+        "Yet another cognitive function"
       ]"""
+
+        # Build task description based on whether we include descriptions
+        if self.include_cf_descriptions:
+            cf_guidance = "Use the descriptions in the cognitive function table below as well as what is typically understood about each cognitive function from a cognitive science perspective when assigning cognitive functions to the benchmark."
+        else:
+            cf_guidance = ""
 
         return f"""Return JSON ONLY.
 
 Task: Make a JSON table about a set of common benchmarks used in evaluation of the latest generation of AI models including Gemini 3 Pro, Claude Opus 4.5, and GPT 5.2. See attached documents for information about the evaluations of these models. Fill in a {num_evals}-row table (fixed roster/order) with the following information about each benchmark:
 - 2-3 sentence description of each benchmark. In the list of benchmarks below, we give you a website link and (where available) a paper link to begin your research into the details of each benchmark. However, don't use this information alone; also search online for more information about each benchmark.
-- a list of cognitive functions that are probed by the benchmark as inferred from your research about the benchmark and from a cognitive science point of view
+- a list of cognitive functions that are probed by the benchmark as inferred from your research about the benchmark and from a cognitive science point of view. When assigning a cognitive function to the benchmark, consider whether an AI model requires or strongly benefits from that cognitive function in order to perform well at the benchmark. {cf_guidance}
 
 Hard constraints:
 1) Exactly {num_evals} rows, exactly in this order, using exactly these benchmark names.
@@ -274,15 +275,15 @@ Use the attached PDFs (Chapter 1 of Liu et al.) for context.
 Fixed roster (exact names in this order with website and paper links):
 {benchmark_table}
 
-Allowed cognitive functions (choose only from this list):
-{cf_list}
+Cognitive Functions (choose ONLY from this {cf_source}):
+{cf_section}
 
 JSON schema (no extra keys):
 {{
   "rows": [
     {{
-      "benchmark_name": "Humanity's Last Exam",
-      "description": "2–3 sentences.",
+      "benchmark_name": "Benchmark Name",
+      "description": "2–3 sentence description.",
       "cognitive_functions": {cf_example}
     }}
     // ... {num_evals} rows total
@@ -432,7 +433,7 @@ JSON schema (no extra keys):
         return True, ""
 
     def payload_to_csv_rows(self, payload: Dict[str, Any]) -> List[Dict]:
-        """Convert JSON payload to CSV row format (before transformation)."""
+        """Convert JSON payload to CSV rows with tier groupings and Max AI Tier."""
         csv_rows = []
 
         # Create lookup dict for benchmark info
@@ -441,64 +442,30 @@ JSON schema (no extra keys):
         for row in payload["rows"]:
             benchmark_name = row.get("benchmark_name", "")
             benchmark_info = benchmark_lookup.get(benchmark_name, {})
-
             cfs = row.get("cognitive_functions", [])
+
+            # Group cognitive functions by tier
+            tier_groups = {'L1': [], 'L2': [], 'L3': []}
 
             if self.exclude_minors:
                 # With --exclude-minors flag: list of {name, is_minor}
-                cf_strings = []
                 for cf in cfs:
                     name = cf.get("name", "")
                     is_minor = cf.get("is_minor", False)
-                    if is_minor:
-                        cf_strings.append(f"{name} (minor)")
-                    else:
-                        cf_strings.append(name)
+                    display_name = f"{name} (minor)" if is_minor else name
+                    tier = self.func_to_tier.get(name)
+                    if tier:
+                        tier_groups[tier].append(display_name)
             else:
                 # Without flag: list of strings
-                cf_strings = cfs
-
-            csv_rows.append({
-                "Benchmark": benchmark_name,
-                "Website": benchmark_info.get("website", ""),
-                "Paper": benchmark_info.get("paper", ""),
-                "Description": row.get("description", ""),
-                "Cognitive Functions": ", ".join(cf_strings)
-            })
-
-        return csv_rows
-
-    def transform_csv_with_tiers(self, csv_rows: List[Dict]) -> List[Dict]:
-        """
-        Transform CSV to group cognitive functions by AI tier.
-
-        Adds tier groupings to Column 4 and Max AI Tier to Column 5.
-        """
-        transformed_rows = []
-
-        for row in csv_rows:
-            new_row = row.copy()
-
-            # Parse cognitive functions
-            cf_string = row.get('Cognitive Functions', '')
-            cfs = cf_string.split(', ')
-
-            # Group by tier
-            tier_groups = {'L1': [], 'L2': [], 'L3': []}
-
-            for cf in cfs:
-                is_minor = '(minor)' in cf
-                cf_base = cf.replace(' (minor)', '')
-
-                # Find tier for this cognitive function
-                tier = self.func_to_tier.get(cf_base)
-
-                if tier:
-                    tier_groups[tier].append(cf)  # Keep original with (minor) if present
+                for name in cfs:
+                    tier = self.func_to_tier.get(name)
+                    if tier:
+                        tier_groups[tier].append(name)
 
             # Format as multi-line string
             tier_lines = [f"{tier}: {', '.join(funcs)}" for tier, funcs in tier_groups.items()]
-            new_row['Cognitive Functions'] = '\n'.join(tier_lines)
+            cf_by_tier = '\n'.join(tier_lines)
 
             # Determine max tier (excluding minor functions)
             max_tier = None
@@ -508,11 +475,16 @@ JSON schema (no extra keys):
                     max_tier = tier
                     break
 
-            new_row['Max AI Tier'] = max_tier
+            csv_rows.append({
+                "Benchmark": benchmark_name,
+                "Website": benchmark_info.get("website", ""),
+                "Paper": benchmark_info.get("paper", ""),
+                "Description": row.get("description", ""),
+                "Cognitive Functions": cf_by_tier,
+                "Max AI Tier": max_tier
+            })
 
-            transformed_rows.append(new_row)
-
-        return transformed_rows
+        return csv_rows
 
     async def run_single_analysis(self, run_id: int) -> Tuple[int, bool, str, List[Dict]]:
         """
@@ -567,21 +539,10 @@ JSON schema (no extra keys):
 
                 print("Payload validated successfully")
 
-                # Convert to CSV format
-                csv_rows = self.payload_to_csv_rows(payload)
+                # Convert payload to CSV rows with tier groupings
+                transformed_rows = self.payload_to_csv_rows(payload)
 
-                # Save raw CSV
-                raw_csv_path = self.output_dir / f"output_run_{run_id}_raw.csv"
-                with open(raw_csv_path, 'w', newline='') as f:
-                    writer = csv.DictWriter(f, fieldnames=csv_rows[0].keys())
-                    writer.writeheader()
-                    writer.writerows(csv_rows)
-                print(f"Saved raw CSV to {raw_csv_path}")
-
-                # Transform CSV
-                transformed_rows = self.transform_csv_with_tiers(csv_rows)
-
-                # Save transformed CSV
+                # Save CSV
                 transformed_csv_path = self.output_dir / f"output_run_{run_id}_transformed.csv"
                 with open(transformed_csv_path, 'w', newline='') as f:
                     writer = csv.DictWriter(f, fieldnames=transformed_rows[0].keys())
@@ -615,6 +576,13 @@ JSON schema (no extra keys):
     async def run_parallel_analysis(self, num_runs: int):
         """Run multiple analyses in parallel."""
         print(f"\nStarting {num_runs} parallel runs...")
+
+        # Save prompt to output directory for future verifiability
+        if self.output_dir:
+            prompt_path = self.output_dir / "prompt.txt"
+            with open(prompt_path, 'w') as f:
+                f.write(self.build_prompt())
+            print(f"Saved prompt to {prompt_path}")
 
         # Run all analyses in parallel (PDFs will be uploaded lazily if needed)
         tasks = [self.run_single_analysis(i + 1) for i in range(num_runs)]
@@ -777,8 +745,8 @@ JSON schema (no extra keys):
 
 async def main():
     parser = argparse.ArgumentParser(description='Analyze benchmarks with GPT-5.2')
-    parser.add_argument('--model', type=str, required=True, choices=['gemini', 'claude', 'gpt'],
-                        help='Which model\'s benchmark set to analyze: gemini, claude, or gpt')
+    parser.add_argument('--model', type=str, required=True, choices=['gemini', 'claude', 'gpt', 'all'],
+                        help='Which model\'s benchmark set to analyze: gemini, claude, gpt, or all (union of all three)')
     parser.add_argument('--runs', type=int, default=1,
                         help='Number of parallel runs (default: 1)')
     parser.add_argument('--output-dir', type=str, default=None,
@@ -789,16 +757,33 @@ async def main():
                         help='Print the prompt and exit without running analysis')
     parser.add_argument('--debug', action='store_true',
                         help='Print detailed error tracebacks (default: False)')
+    parser.add_argument('--no-cf-descriptions', action='store_true',
+                        help='Use simple list of cognitive function names instead of table with descriptions')
     args = parser.parse_args()
+
+    # Check CSV files exist first (before loading)
+    if not os.path.exists(BENCHMARK_INFO_CSV):
+        print(f"Error: Required file not found: {BENCHMARK_INFO_CSV}")
+        sys.exit(1)
+
+    if not os.path.exists(COGNITIVE_FUNCTIONS_CSV):
+        print(f"Error: Required file not found: {COGNITIVE_FUNCTIONS_CSV}")
+        sys.exit(1)
 
     # Load benchmarks based on model flag
     benchmarks = load_benchmarks(args.model)
     print(f"Loaded {len(benchmarks)} benchmarks for {args.model}")
 
+    # Load cognitive function descriptions and tier mappings
+    cognitive_functions, func_to_tier = load_cognitive_functions()
+    print(f"Loaded {len(cognitive_functions)} cognitive function descriptions")
+
+    include_cf_descriptions = not args.no_cf_descriptions
+
     # If --print-prompt, just print the prompt and exit
     if args.print_prompt:
         # Create a temporary analyzer just to build the prompt (no output directory needed)
-        temp_analyzer = BenchmarkAnalyzer(None, benchmarks, args.exclude_minors, args.debug)
+        temp_analyzer = BenchmarkAnalyzer(None, benchmarks, args.exclude_minors, args.debug, cognitive_functions, func_to_tier, include_cf_descriptions)
         prompt = temp_analyzer.build_prompt()
         print("\n" + "="*80)
         print("PROMPT")
@@ -811,17 +796,12 @@ async def main():
         print("Error: Number of runs must be at least 1")
         sys.exit(1)
 
-    # Check required files exist
-    required_files = [PDF_LIU, PDF_GEMINI, PDF_CLAUDE, PDF_GPT, BENCHMARK_INFO_CSV]
-    for file_path in required_files:
+    # Check PDF files exist (only needed for actual API calls, not --print-prompt)
+    pdf_files = [PDF_LIU, PDF_GEMINI, PDF_CLAUDE, PDF_GPT]
+    for file_path in pdf_files:
         if not os.path.exists(file_path):
-            print(f"Error: Required file not found: {file_path}")
+            print(f"Error: Required PDF not found: {file_path}")
             sys.exit(1)
-
-    # Check API key
-    if not os.getenv("OPENAI_API_KEY"):
-        print("Error: OPENAI_API_KEY is not set")
-        sys.exit(1)
 
     # Determine output directory
     if args.output_dir:
@@ -834,7 +814,7 @@ async def main():
         print(f"Creating new output directory: {output_dir}")
 
     # Run analysis
-    analyzer = BenchmarkAnalyzer(output_dir, benchmarks, exclude_minors=args.exclude_minors, debug=args.debug)
+    analyzer = BenchmarkAnalyzer(output_dir, benchmarks, exclude_minors=args.exclude_minors, debug=args.debug, cognitive_functions=cognitive_functions, func_to_tier=func_to_tier, include_cf_descriptions=include_cf_descriptions)
     await analyzer.run_parallel_analysis(args.runs)
 
 

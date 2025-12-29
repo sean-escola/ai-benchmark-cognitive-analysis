@@ -4,9 +4,9 @@ SWE-bench Multilingual,https://www.swebench.com/multilingual.html,https://arxiv.
 SWE-bench Pro,https://scale.com/research/swe_bench_pro,https://arxiv.org/abs/2509.16941,FALSE,TRUE,TRUE
 Terminal-Bench 2.0,https://www.tbench.ai/,,TRUE,TRUE,FALSE
 BrowseComp,https://openai.com/index/browsecomp/,https://arxiv.org/abs/2504.12516,FALSE,TRUE,TRUE
-τ2-bench,https://sierra.ai/uk/blog/benchmarking-ai-agents,https://arxiv.org/abs/2406.12045,TRUE,TRUE,TRUE
+τ2-bench,https://sierra.ai/uk/blog/benchmarking-agents-in-collaborative-real-world-scenarios,https://arxiv.org/abs/2506.07982,TRUE,TRUE,TRUE
 OSWorld,https://os-world.github.io/,https://arxiv.org/abs/2404.07972,FALSE,TRUE,FALSE
-ARC-AGI,https://arcprize.org/arc-agi,https://arxiv.org/abs/1911.01547,TRUE,TRUE,TRUE
+ARC-AGI-2,https://arcprize.org/arc-agi/2,https://arxiv.org/abs/1911.01547,TRUE,TRUE,TRUE
 Vending-Bench 2,https://andonlabs.com/evals/vending-bench-2,https://arxiv.org/abs/2502.15840,TRUE,TRUE,FALSE
 MCP-Atlas,https://scale.com/leaderboard/mcp_atlas,,FALSE,TRUE,TRUE
 FinanceAgent,https://www.vals.ai/benchmarks/finance_agent,,FALSE,TRUE,FALSE

@@ -19,10 +19,10 @@ pip install -r requirements.txt
 export OPENAI_API_KEY='your-api-key-here'
 
 # Print the prompt to see what will be sent to GPT-5.2
-python benchmark_analysis.py --model gemini --print-prompt
+python benchmark_analysis.py --model all --print-prompt
 
-# Run analysis (25 parallel runs for statistical robustness)
-python benchmark_analysis.py --model gemini --runs 25
+# Run analysis (50 parallel runs for statistical robustness)
+python benchmark_analysis.py --model all --runs 50 --exclude-minors
 ```
 
 ## Usage
@@ -30,15 +30,16 @@ python benchmark_analysis.py --model gemini --runs 25
 ### Basic Usage
 
 ```bash
-python benchmark_analysis.py --model {gemini|claude|gpt} [OPTIONS]
+python benchmark_analysis.py --model {gemini|claude|gpt|all} [OPTIONS]
 ```
 
 ### Required Arguments
 
-- `--model {gemini,claude,gpt}`: Select which model's benchmark set to analyze
-  - `gemini`: Benchmarks used in Gemini 3 Pro's launch documents
-  - `claude`: Benchmarks used in Claude Opus 4.5's launch documents
-  - `gpt`: Benchmarks used in GPT 5.2's launch documents
+- `--model {gemini,claude,gpt,all}`: Select which model's benchmark set to analyze
+  - `gemini`: Benchmarks used in Gemini 3 Pro's launch documents (20 benchmarks)
+  - `claude`: Benchmarks used in Claude Opus 4.5's launch documents (20 benchmarks)
+  - `gpt`: Benchmarks used in GPT 5.2's launch documents (21 benchmarks)
+  - `all`: Union of all three sets (37 benchmarks) - recommended for best calibration
 
 ### Optional Arguments
 
@@ -49,22 +50,33 @@ python benchmark_analysis.py --model {gemini|claude|gpt} [OPTIONS]
   - With flag: Distinguishes core vs. minimally-probed functions, excludes minor functions from AI tier calculation
 - `--output-dir PATH`: Resume/extend existing run directory
 - `--print-prompt`: Print the prompt and exit (useful for debugging)
+- `--no-cf-descriptions`: Use simple list of cognitive function names instead of table with descriptions (default: include descriptions)
 
 ### Examples
 
 ```bash
-# Gemini benchmarks, no minor distinction, 25 runs
+# All benchmarks with minor distinction (recommended)
+python benchmark_analysis.py --model all --runs 50 --exclude-minors
+
+# Print prompt without running
+python benchmark_analysis.py --model all --print-prompt
+
+# Model-specific benchmarks (may have different calibration due to batch effects)
 python benchmark_analysis.py --model gemini --runs 25
 
-# Claude benchmarks with minor distinction
-python benchmark_analysis.py --model claude --exclude-minors --runs 25
-
-# Print GPT prompt without running
-python benchmark_analysis.py --model gpt --print-prompt
-
-# Resume/extend existing run (use the timestamped directory name)
-python benchmark_analysis.py --model gemini --runs 10 --output-dir run_gemini_with-minors_20251218_172548
+# Resume/extend existing run
+python benchmark_analysis.py --model all --runs 10 --output-dir run_all
 ```
+
+### Splitting Results by Model
+
+After running with `--model all`, use `split_by_model.py` to generate per-model summaries:
+
+```bash
+python split_by_model.py run_all
+```
+
+This creates `tier_variability_summary_{gemini,claude,gpt}.csv` files filtered to each model's benchmark set.
 
 ## Input Files
 
@@ -73,6 +85,9 @@ The repository includes all necessary input files:
 - **`benchmark_info.csv`**: Master list of 37 benchmarks with website/paper links
   - Contains the union of all benchmarks from Gemini 3 Pro, Claude Opus 4.5, and GPT 5.2 launch documents
   - Each model's column (TRUE/FALSE) indicates which benchmarks that model's evaluation used
+- **`cognitive_functions.csv`**: 34 cognitive functions with AI tiers and descriptions
+  - Columns: Capacity, AI_Tier, Description
+  - Descriptions are included in the prompt by default (use `--no-cf-descriptions` to exclude)
 - **`Liu et al., Ch 1.pdf`**: First chapter of [Liu et al., 2025](https://arxiv.org/abs/2504.01990) - Cognitive neuroscience framework reference
 - **`Gemini 3 Pro - eval info.pdf`**: Gemini 3 Pro evaluation document
 - **`Claude Opus 4.5 - eval info.pdf`**: Claude Opus 4.5 evaluation document
@@ -92,10 +107,11 @@ The pre-generated result directories in this repository have had timestamps remo
 
 ### Output Files
 
+- `prompt.txt`: The exact prompt sent to GPT-5.2 (saved once at start)
+
 For each successful run N:
-- `output_run_N_raw.csv`: Original analysis from GPT-5.2
-  - Columns: Benchmark, Website, Paper, Description, Cognitive Functions
-- `output_run_N_transformed.csv`: Grouped by AI tier with max tier
+- `output_run_N_transformed.csv`: Analysis grouped by AI tier with max tier
+  - Columns: Benchmark, Website, Paper, Description, Cognitive Functions, Max AI Tier
   - Cognitive Functions column shows: "L1: ...\nL2: ...\nL3: ..."
   - Max AI Tier column shows highest tier (L1/L2/L3)
 
@@ -131,31 +147,37 @@ FACTS Benchmark Suite:
 
 ## Pre-Generated Results
 
-The repository includes six pre-generated result directories for reference:
+The repository includes pre-generated results in `run_all/`, created with:
 
-- `run_gemini_with-minors/`: Gemini benchmarks, all functions counted
-- `run_gemini_no-minors/`: Gemini benchmarks, minor functions excluded from AI tier
-- `run_claude_with-minors/`: Claude benchmarks, all functions counted
-- `run_claude_no-minors/`: Claude benchmarks, minor functions excluded from AI tier
-- `run_gpt_with-minors/`: GPT benchmarks, all functions counted
-- `run_gpt_no-minors/`: GPT benchmarks, minor functions excluded from AI tier
+```bash
+python benchmark_analysis.py --model all --runs 50 --exclude-minors --output-dir run_all
+```
 
-These can be used directly without regenerating (which requires OpenAI API access and costs).
+This directory contains:
+- `output_run_N_transformed.csv`: Results from each of 50 runs
+- `tier_variability_summary.csv`: Aggregated statistics for all 37 benchmarks
+- `tier_variability_summary_{gemini,claude,gpt}.csv`: Per-model filtered summaries
+- `prompt.txt`: The exact prompt sent to GPT-5.2
+
+Using `--model all` (37 benchmarks together) provides better calibration than model-specific runs due to batch effects in how GPT-5.2 assigns cognitive functions.
+
+These results can be used directly without regenerating (which requires OpenAI API access and costs).
 
 ## How It Works
 
 1. **Benchmark Selection**: Loads benchmarks from `benchmark_info.csv` based on `--model` flag
-2. **PDF Upload**: Uploads PDFs to OpenAI (cached after first upload)
-3. **GPT-5.2 Call**: Sends prompt with benchmarks + PDFs, uses `reasoning={effort: "high"}`
-4. **Structured Output**: Uses JSON schema to enforce valid responses
-5. **Validation**: Ensures benchmark order and cognitive function validity
-6. **Transformation**: Groups cognitive functions by AI tier (L1, L2, L3)
-7. **AI Tier Assignment**: Determines max AI tier for each benchmark
-8. **Statistics**: Aggregates results across multiple runs
+2. **Cognitive Functions**: Loads function names, descriptions, and tiers from `cognitive_functions.csv`
+3. **PDF Upload**: Uploads PDFs to OpenAI (cached after first upload)
+4. **GPT-5.2 Call**: Sends prompt with benchmarks, cognitive function descriptions, and PDFs; uses `reasoning={effort: "high"}`
+5. **Structured Output**: Uses JSON schema to enforce valid responses
+6. **Validation**: Ensures benchmark order and cognitive function validity
+7. **Transformation**: Groups cognitive functions by AI tier (L1, L2, L3)
+8. **AI Tier Assignment**: Determines max AI tier for each benchmark
+9. **Statistics**: Aggregates results across multiple runs
 
 ## Cognitive Functions
 
-The script uses 34 cognitive functions organized by AI tier (adapted from [Liu et al., 2025](https://arxiv.org/abs/2504.01990)):
+The script uses 34 cognitive functions organized by AI tier, loaded from `cognitive_functions.csv` (adapted from [Liu et al., 2025](https://arxiv.org/abs/2504.01990)). Each function includes a neuroscience-based description that helps GPT-5.2 make accurate assignments:
 
 **L1 (Basic Processing)**: Visual Perception, Language Comprehension, Language Production, Face Recognition, Auditory Processing, Reflexive Responses
 

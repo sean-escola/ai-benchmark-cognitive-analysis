@@ -1,0 +1,21 @@
+Benchmark,L1_count,L2_count,L3_count,Total_runs,Mode_tier,Distinct_tiers
+SWE-bench Verified,0,46,4,50,L2,2
+Terminal-Bench 2.0,0,40,10,50,L2,2
+τ2-bench,0,0,50,50,L3,1
+ARC-AGI-2,0,0,50,50,L3,1
+Vending-Bench 2,0,47,3,50,L2,2
+Humanity’s Last Exam,0,50,0,50,L2,1
+AIME 2025,0,50,0,50,L2,1
+GPQA Diamond,0,50,0,50,L2,1
+MMMLU,0,50,0,50,L2,1
+MMMU-Pro,0,50,0,50,L2,1
+MathArena Apex,0,50,0,50,L2,1
+ScreenShot-Pro,0,50,0,50,L2,1
+CharXiv Reasoning,0,50,0,50,L2,1
+OmniDocBench 1.5,1,49,0,50,L2,2
+Video-MMMU,0,50,0,50,L2,1
+LiveCodeBench Pro,0,50,0,50,L2,1
+FACTS Benchmark Suite,0,2,48,50,L3,2
+SimpleQA Verified,0,32,18,50,L2,2
+Global PIQA,0,50,0,50,L2,1
+MRCR v2 (8-needle),0,48,2,50,L2,2
