@@ -613,9 +613,11 @@ JSON schema (no extra keys):
 
     def compute_statistics(self, results: List[Tuple[int, List[Dict]]]):
         """Compute summary statistics across runs."""
-        print(f"\n{'='*60}")
-        print("STATISTICS")
-        print(f"{'='*60}")
+        lines = []  # Collect output for both screen and file
+
+        lines.append(f"\n{'='*60}")
+        lines.append("STATISTICS")
+        lines.append(f"{'='*60}")
 
         # Count assignments per tier per run
         tier_counts_per_run = []
@@ -645,30 +647,41 @@ JSON schema (no extra keys):
             tier_counts_per_run.append(tier_counts)
 
         # Compute mean and std err for each tier
-        print("\nAI Tier Assignment Statistics:")
-        print(f"{'Tier':<10} {'Mean':<10} {'Std Err':<10}")
-        print("-" * 30)
+        lines.append("\nAI Tier Assignment Statistics:")
+        lines.append(f"{'Tier':<10} {'Mean':<10} {'Std Err':<10}")
+        lines.append("-" * 30)
 
         for tier in ['L1', 'L2', 'L3']:
             counts = [tc[tier] for tc in tier_counts_per_run]
             mean = np.mean(counts)
             stderr = np.std(counts, ddof=1) / np.sqrt(len(counts)) if len(counts) > 1 else 0
-            print(f"{tier:<10} {mean:<10.2f} {stderr:<10.2f}")
+            lines.append(f"{tier:<10} {mean:<10.2f} {stderr:<10.2f}")
 
         # Report L3 assignments
         if l3_assignments:
-            print(f"\n{'='*60}")
-            print("L3 ASSIGNMENTS DETAIL")
-            print(f"{'='*60}")
+            lines.append(f"\n{'='*60}")
+            lines.append("L3 ASSIGNMENTS DETAIL")
+            lines.append(f"{'='*60}")
 
             for benchmark in sorted(l3_assignments.keys()):
-                print(f"\n{benchmark}:")
+                lines.append(f"\n{benchmark}:")
                 for run_id in sorted(l3_assignments[benchmark].keys()):
                     funcs = l3_assignments[benchmark][run_id]
                     if funcs:
-                        print(f"  Run {run_id}: {', '.join(funcs)}")
+                        lines.append(f"  Run {run_id}: {', '.join(funcs)}")
                     else:
-                        print(f"  Run {run_id}: (only minor L3 functions)")
+                        lines.append(f"  Run {run_id}: (only minor L3 functions)")
+
+        # Print to screen
+        for line in lines:
+            print(line)
+
+        # Write to file
+        if self.output_dir:
+            stats_path = self.output_dir / "statistics.txt"
+            with open(stats_path, 'w') as f:
+                f.write('\n'.join(lines))
+            print(f"\nSaved statistics to {stats_path}")
 
     def generate_variability_summary(self, results: List[Tuple[int, List[Dict]]]):
         """Generate CSV summary of tier assignment variability across runs."""

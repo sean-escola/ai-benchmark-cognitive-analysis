@@ -158,6 +158,7 @@ This directory contains:
 - `tier_variability_summary.csv`: Aggregated statistics for all 37 benchmarks
 - `tier_variability_summary_{gemini,claude,gpt}.csv`: Per-model filtered summaries
 - `prompt.txt`: The exact prompt sent to GPT-5.2
+- `statistics.txt`: Summary statistics and L3 assignment details
 
 Using `--model all` (37 benchmarks together) provides better calibration than model-specific runs due to batch effects in how GPT-5.2 assigns cognitive functions.
 
