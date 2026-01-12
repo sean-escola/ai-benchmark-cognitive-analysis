@@ -6,9 +6,9 @@ STATISTICS
 AI Tier Assignment Statistics:
 Tier       Mean       Std Err   
 ------------------------------
-L1         0.02       0.02      
-L2         31.34      0.28      
-L3         5.64       0.28      
+L1         0.00       0.00      
+L2         30.84      0.33      
+L3         6.16       0.33      
 
 ============================================================
 L3 ASSIGNMENTS DETAIL
@@ -67,85 +67,101 @@ ARC-AGI-2:
   Run 50: Cognitive Flexibility
 
 CyberGym:
-  Run 2: Cognitive Flexibility
-  Run 15: Cognitive Flexibility
-  Run 36: Cognitive Flexibility
-  Run 43: Cognitive Flexibility
+  Run 3: Cognitive Flexibility
+  Run 4: Cognitive Flexibility
+  Run 19: Cognitive Flexibility
+  Run 22: Cognitive Flexibility
+  Run 29: Cognitive Flexibility
+  Run 46: Cognitive Flexibility
   Run 49: Cognitive Flexibility
 
 FACTS Benchmark Suite:
   Run 1: Inhibitory Control
   Run 2: Inhibitory Control
-  Run 3: Inhibitory Control, Self-reflection
+  Run 3: Inhibitory Control
   Run 4: Inhibitory Control
   Run 5: Inhibitory Control
   Run 6: Inhibitory Control
   Run 7: Inhibitory Control
-  Run 8: Inhibitory Control, Self-reflection
-  Run 9: Inhibitory Control
+  Run 8: Inhibitory Control
+  Run 9: Inhibitory Control, Self-reflection
   Run 10: Inhibitory Control
   Run 11: Inhibitory Control
-  Run 12: Inhibitory Control
-  Run 13: Inhibitory Control
+  Run 12: Inhibitory Control, Self-reflection
+  Run 13: Inhibitory Control, Self-reflection
   Run 14: Inhibitory Control
   Run 15: Inhibitory Control
   Run 16: Inhibitory Control
   Run 17: Inhibitory Control
-  Run 18: Inhibitory Control
+  Run 18: Inhibitory Control, Self-reflection
   Run 19: Inhibitory Control
   Run 20: Inhibitory Control
-  Run 21: Inhibitory Control
-  Run 22: Inhibitory Control
+  Run 21: Inhibitory Control, Self-reflection
   Run 23: Inhibitory Control
-  Run 24: Inhibitory Control
-  Run 25: Inhibitory Control
+  Run 25: Self-reflection
   Run 26: Inhibitory Control
-  Run 27: Inhibitory Control, Self-reflection
+  Run 27: Inhibitory Control
+  Run 28: Inhibitory Control
   Run 29: Inhibitory Control
   Run 30: Inhibitory Control
-  Run 31: Inhibitory Control
+  Run 31: Inhibitory Control, Self-reflection
   Run 32: Inhibitory Control
-  Run 33: Inhibitory Control
+  Run 33: Self-reflection, Inhibitory Control
   Run 34: Inhibitory Control
   Run 35: Inhibitory Control
-  Run 36: Inhibitory Control, Self-reflection
-  Run 37: Inhibitory Control, Self-reflection
+  Run 36: Inhibitory Control
+  Run 37: Inhibitory Control
   Run 38: Inhibitory Control
   Run 39: Inhibitory Control, Self-reflection
-  Run 40: Inhibitory Control, Self-reflection
+  Run 40: Inhibitory Control
   Run 41: Inhibitory Control
   Run 42: Inhibitory Control
   Run 43: Inhibitory Control
-  Run 44: Inhibitory Control
-  Run 45: Inhibitory Control
+  Run 44: Inhibitory Control, Self-reflection
+  Run 45: Inhibitory Control, Self-reflection
   Run 46: Inhibitory Control
-  Run 48: Inhibitory Control
+  Run 47: Inhibitory Control, Self-reflection
+  Run 48: Self-reflection, Inhibitory Control
   Run 49: Inhibitory Control
   Run 50: Inhibitory Control
 
 FrontierMath:
-  Run 9: Cognitive Flexibility
+  Run 13: Cognitive Flexibility
 
 GDPval:
-  Run 21: Cognitive Flexibility
+  Run 11: Cognitive Flexibility
+  Run 19: Cognitive Flexibility
+
+Global PIQA:
+  Run 9: Social Reasoning & Theory of Mind
+  Run 27: Cognitive Flexibility
+  Run 50: Cognitive Flexibility
 
 MCP-Atlas:
-  Run 1: Cognitive Flexibility
-  Run 2: Cognitive Flexibility
-  Run 13: Cognitive Flexibility
-  Run 21: Cognitive Flexibility
-  Run 24: Cognitive Flexibility
+  Run 14: Cognitive Flexibility
+  Run 17: Cognitive Flexibility
+  Run 19: Cognitive Flexibility
+  Run 22: Cognitive Flexibility
+  Run 27: Cognitive Flexibility
+  Run 32: Cognitive Flexibility
+  Run 36: Cognitive Flexibility
   Run 41: Cognitive Flexibility
-  Run 43: Cognitive Flexibility
+  Run 42: Cognitive Flexibility
+  Run 49: Cognitive Flexibility
+  Run 50: Cognitive Flexibility
+
+MMMLU:
+  Run 24: Cognitive Flexibility
+  Run 27: Cognitive Flexibility
+  Run 47: Cognitive Flexibility
+  Run 50: Cognitive Flexibility
 
 MRCR v2 (8-needle):
-  Run 38: Inhibitory Control
-  Run 45: Inhibitory Control
+  Run 16: Inhibitory Control
 
 SWE-Lancer:
-  Run 2: Cognitive Flexibility
-  Run 15: Cognitive Flexibility
-  Run 36: Cognitive Flexibility
+  Run 19: Cognitive Flexibility
+  Run 22: Cognitive Flexibility
 
 SWE-bench Multilingual:
   Run 1: Cognitive Flexibility
@@ -166,6 +182,7 @@ SWE-bench Multilingual:
   Run 16: Cognitive Flexibility
   Run 17: Cognitive Flexibility
   Run 18: Cognitive Flexibility
+  Run 19: Cognitive Flexibility
   Run 20: Cognitive Flexibility
   Run 21: Cognitive Flexibility
   Run 22: Cognitive Flexibility
@@ -177,10 +194,8 @@ SWE-bench Multilingual:
   Run 28: Cognitive Flexibility
   Run 29: Cognitive Flexibility
   Run 30: Cognitive Flexibility
-  Run 31: Cognitive Flexibility
   Run 32: Cognitive Flexibility
   Run 33: Cognitive Flexibility
-  Run 34: Cognitive Flexibility
   Run 35: Cognitive Flexibility
   Run 36: Cognitive Flexibility
   Run 37: Cognitive Flexibility
@@ -191,92 +206,109 @@ SWE-bench Multilingual:
   Run 42: Cognitive Flexibility
   Run 43: Cognitive Flexibility
   Run 44: Cognitive Flexibility
-  Run 45: Cognitive Flexibility
   Run 46: Cognitive Flexibility
   Run 47: Cognitive Flexibility
   Run 48: Cognitive Flexibility
   Run 49: Cognitive Flexibility
+  Run 50: Cognitive Flexibility
 
 SWE-bench Pro:
-  Run 1: Cognitive Flexibility
-  Run 2: Cognitive Flexibility
   Run 3: Cognitive Flexibility
   Run 4: Cognitive Flexibility
-  Run 8: Cognitive Flexibility
-  Run 9: Cognitive Flexibility
-  Run 15: Cognitive Flexibility
-  Run 21: Cognitive Flexibility
+  Run 10: Cognitive Flexibility
+  Run 11: Cognitive Flexibility
+  Run 16: Cognitive Flexibility
+  Run 17: Cognitive Flexibility
+  Run 19: Cognitive Flexibility
+  Run 20: Cognitive Flexibility
   Run 22: Cognitive Flexibility
-  Run 23: Cognitive Flexibility
-  Run 24: Cognitive Flexibility
-  Run 28: Cognitive Flexibility
+  Run 25: Cognitive Flexibility
+  Run 27: Cognitive Flexibility
   Run 29: Cognitive Flexibility
+  Run 32: Cognitive Flexibility
+  Run 35: Cognitive Flexibility
   Run 36: Cognitive Flexibility
-  Run 41: Cognitive Flexibility
-  Run 42: Cognitive Flexibility
-  Run 43: Cognitive Flexibility
-  Run 44: Cognitive Flexibility
+  Run 38: Cognitive Flexibility
+  Run 46: Cognitive Flexibility
   Run 49: Cognitive Flexibility
 
 SWE-bench Verified:
-  Run 2: Cognitive Flexibility
-  Run 24: Cognitive Flexibility
-  Run 27: Self-reflection
-  Run 41: Cognitive Flexibility
+  Run 19: Cognitive Flexibility
+  Run 49: Cognitive Flexibility
 
 SimpleQA Verified:
+  Run 1: Inhibitory Control
+  Run 2: Inhibitory Control
   Run 3: Inhibitory Control
-  Run 11: Inhibitory Control
-  Run 12: Inhibitory Control
-  Run 13: Inhibitory Control
-  Run 16: Inhibitory Control
-  Run 19: Inhibitory Control
-  Run 20: Inhibitory Control
-  Run 24: Inhibitory Control
-  Run 27: Inhibitory Control
-  Run 29: Inhibitory Control
+  Run 6: Inhibitory Control
+  Run 7: Inhibitory Control
+  Run 10: Inhibitory Control
+  Run 15: Inhibitory Control
+  Run 31: Inhibitory Control
   Run 32: Inhibitory Control
-  Run 35: Inhibitory Control
+  Run 34: Inhibitory Control
   Run 36: Inhibitory Control
-  Run 37: Inhibitory Control
   Run 38: Inhibitory Control
+  Run 39: Inhibitory Control
+  Run 41: Inhibitory Control
+  Run 44: Inhibitory Control
   Run 46: Inhibitory Control
+  Run 47: Inhibitory Control
   Run 48: Inhibitory Control
-  Run 49: Inhibitory Control
 
 Terminal-Bench 2.0:
-  Run 2: Cognitive Flexibility
-  Run 13: Cognitive Flexibility
-  Run 15: Cognitive Flexibility
-  Run 24: Cognitive Flexibility
-  Run 25: Cognitive Flexibility
-  Run 27: Self-reflection
+  Run 3: Cognitive Flexibility
+  Run 4: Cognitive Flexibility
+  Run 14: Cognitive Flexibility
+  Run 19: Cognitive Flexibility
+  Run 22: Cognitive Flexibility
+  Run 27: Cognitive Flexibility
+  Run 29: Cognitive Flexibility
   Run 32: Cognitive Flexibility
-  Run 37: Cognitive Flexibility
-  Run 40: Cognitive Flexibility
-  Run 43: Cognitive Flexibility
+  Run 36: Cognitive Flexibility
+  Run 41: Inhibitory Control
+  Run 46: Cognitive Flexibility
+  Run 49: Cognitive Flexibility
+  Run 50: Cognitive Flexibility
 
 Toolathon:
-  Run 1: Cognitive Flexibility
-  Run 2: Cognitive Flexibility
-  Run 13: Cognitive Flexibility
-  Run 21: Cognitive Flexibility
-  Run 24: Cognitive Flexibility
-  Run 25: Cognitive Flexibility
+  Run 4: Cognitive Flexibility
+  Run 9: Cognitive Flexibility
+  Run 12: Inhibitory Control
+  Run 14: Cognitive Flexibility
+  Run 16: Cognitive Flexibility
+  Run 17: Cognitive Flexibility
+  Run 18: Cognitive Flexibility
+  Run 19: Cognitive Flexibility
+  Run 22: Cognitive Flexibility
+  Run 27: Cognitive Flexibility
+  Run 29: Cognitive Flexibility
+  Run 31: Cognitive Flexibility
+  Run 32: Cognitive Flexibility
   Run 36: Cognitive Flexibility
-  Run 37: Cognitive Flexibility
-  Run 40: Cognitive Flexibility
   Run 41: Cognitive Flexibility
-  Run 43: Cognitive Flexibility
+  Run 42: Cognitive Flexibility
+  Run 46: Cognitive Flexibility
+  Run 47: Cognitive Flexibility
   Run 49: Cognitive Flexibility
+  Run 50: Cognitive Flexibility
 
 Vending-Bench 2:
-  Run 21: Cognitive Flexibility
-  Run 43: Cognitive Flexibility
-  Run 49: Cognitive Flexibility
+  Run 19: Cognitive Flexibility
+  Run 20: Cognitive Flexibility
+  Run 22: Cognitive Flexibility
+  Run 32: Cognitive Flexibility
+  Run 36: Cognitive Flexibility
+  Run 41: Cognitive Flexibility
+  Run 46: Cognitive Flexibility
+
+Video-MMMU:
+  Run 40: Cognitive Timing & Predictive Modeling
 
 WebArena:
-  Run 2: Cognitive Flexibility
+  Run 32: Cognitive Flexibility
+  Run 36: Cognitive Flexibility
+  Run 41: Inhibitory Control
 
 τ2-bench:
   Run 1: Social Reasoning & Theory of Mind, Inhibitory Control
@@ -284,7 +316,7 @@ WebArena:
   Run 3: Social Reasoning & Theory of Mind, Inhibitory Control
   Run 4: Social Reasoning & Theory of Mind, Inhibitory Control
   Run 5: Social Reasoning & Theory of Mind, Inhibitory Control
-  Run 6: Social Reasoning & Theory of Mind, Inhibitory Control
+  Run 6: Social Reasoning & Theory of Mind
   Run 7: Social Reasoning & Theory of Mind, Inhibitory Control
   Run 8: Social Reasoning & Theory of Mind, Inhibitory Control
   Run 9: Social Reasoning & Theory of Mind, Inhibitory Control
@@ -295,18 +327,18 @@ WebArena:
   Run 14: Social Reasoning & Theory of Mind, Inhibitory Control
   Run 15: Social Reasoning & Theory of Mind, Inhibitory Control
   Run 16: Social Reasoning & Theory of Mind, Inhibitory Control
-  Run 17: Social Reasoning & Theory of Mind, Inhibitory Control
-  Run 18: Social Reasoning & Theory of Mind
-  Run 19: Social Reasoning & Theory of Mind, Inhibitory Control
+  Run 17: Social Reasoning & Theory of Mind
+  Run 18: Social Reasoning & Theory of Mind, Inhibitory Control
+  Run 19: Inhibitory Control
   Run 20: Social Reasoning & Theory of Mind, Inhibitory Control
-  Run 21: Inhibitory Control, Social Reasoning & Theory of Mind
+  Run 21: Social Reasoning & Theory of Mind, Inhibitory Control
   Run 22: Social Reasoning & Theory of Mind, Inhibitory Control
-  Run 23: Inhibitory Control
+  Run 23: Social Reasoning & Theory of Mind
   Run 24: Social Reasoning & Theory of Mind, Inhibitory Control
-  Run 25: Social Reasoning & Theory of Mind
+  Run 25: Social Reasoning & Theory of Mind, Inhibitory Control
   Run 26: Social Reasoning & Theory of Mind, Inhibitory Control
   Run 27: Social Reasoning & Theory of Mind, Inhibitory Control
-  Run 28: Social Reasoning & Theory of Mind
+  Run 28: Social Reasoning & Theory of Mind, Inhibitory Control
   Run 29: Social Reasoning & Theory of Mind, Inhibitory Control
   Run 30: Social Reasoning & Theory of Mind, Inhibitory Control
   Run 31: Social Reasoning & Theory of Mind, Inhibitory Control
@@ -320,12 +352,12 @@ WebArena:
   Run 39: Social Reasoning & Theory of Mind, Inhibitory Control
   Run 40: Social Reasoning & Theory of Mind, Inhibitory Control
   Run 41: Social Reasoning & Theory of Mind, Inhibitory Control
-  Run 42: Social Reasoning & Theory of Mind, Inhibitory Control
+  Run 42: Social Reasoning & Theory of Mind
   Run 43: Social Reasoning & Theory of Mind, Inhibitory Control
-  Run 44: Social Reasoning & Theory of Mind
-  Run 45: Social Reasoning & Theory of Mind, Inhibitory Control
+  Run 44: Social Reasoning & Theory of Mind, Inhibitory Control
+  Run 45: Social Reasoning & Theory of Mind
   Run 46: Social Reasoning & Theory of Mind, Inhibitory Control
-  Run 47: Social Reasoning & Theory of Mind
+  Run 47: Social Reasoning & Theory of Mind, Inhibitory Control
   Run 48: Social Reasoning & Theory of Mind, Inhibitory Control
   Run 49: Social Reasoning & Theory of Mind, Inhibitory Control
   Run 50: Social Reasoning & Theory of Mind, Inhibitory Control
